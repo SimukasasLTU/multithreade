@@ -21,6 +21,8 @@ public class FileProcessingUI extends JFrame {
     private String filePath1;
     private String filePath2;
     private int totalLines = 0;
+    private JButton startButton;
+    private JButton cancelButton;
 
     public FileProcessingUI() {
         setTitle("File Processing");
@@ -50,14 +52,16 @@ public class FileProcessingUI extends JFrame {
 
         // File selection panel
         JPanel filePanel = new JPanel();
-        filePanel.setLayout(new GridLayout(3, 2, 10, 10));
+        filePanel.setLayout(new GridLayout(4, 2, 10, 10));
 
         fileLabel1 = new JLabel("File 1: Not Selected");
         fileLabel2 = new JLabel("File 2: Not Selected");
         JButton selectFile1Button = new JButton("Select File 1");
         JButton selectFile2Button = new JButton("Select File 2");
-        JButton startButton = new JButton("Start Processing");
+        startButton = new JButton("Start Processing");
         startButton.setEnabled(false);
+        cancelButton = new JButton("Cancel");
+        cancelButton.setEnabled(false);
         JButton clearButton = new JButton("Clear");
 
         filePanel.add(fileLabel1);
@@ -66,12 +70,15 @@ public class FileProcessingUI extends JFrame {
         filePanel.add(selectFile2Button);
         filePanel.add(clearButton);
         filePanel.add(startButton);
+        filePanel.add(new JLabel()); // empty space
+        filePanel.add(cancelButton);
 
         add(filePanel, BorderLayout.WEST);
 
         selectFile1Button.addActionListener(e -> selectFile(1, startButton));
         selectFile2Button.addActionListener(e -> selectFile(2, startButton));
         startButton.addActionListener(e -> startProcessing());
+        cancelButton.addActionListener(e -> cancelProcessing());
         clearButton.addActionListener(e -> clearUI());
     }
 
@@ -112,6 +119,16 @@ public class FileProcessingUI extends JFrame {
         writer.start();
 
         statusLabel.setText("Processing started...");
+        startButton.setEnabled(false);
+        cancelButton.setEnabled(true);
+    }
+
+    private void cancelProcessing() {
+        // Implement logic to stop the threads gracefully
+        System.out.println("Processing cancelled.");
+        statusLabel.setText("Processing cancelled.");
+        startButton.setEnabled(true);
+        cancelButton.setEnabled(false);
     }
 
     public synchronized void appendText(String text) {
@@ -136,6 +153,8 @@ public class FileProcessingUI extends JFrame {
         filePath1 = null;
         filePath2 = null;
         totalLines = 0;
+        startButton.setEnabled(false);
+        cancelButton.setEnabled(false);
     }
 
     public BlockingQueue<String> getQueue() {
@@ -143,7 +162,9 @@ public class FileProcessingUI extends JFrame {
     }
 
     public static void main(String[] args) {
-        FileProcessingUI ui = new FileProcessingUI();
-        ui.setVisible(true);
+        SwingUtilities.invokeLater(() -> {
+            FileProcessingUI ui = new FileProcessingUI();
+            ui.setVisible(true);
+        });
     }
 }

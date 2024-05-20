@@ -24,11 +24,11 @@ public class FileReadingTask implements Task {
             int lineCount = 0;
             while ((line = reader.readLine()) != null) {
                 lineCount++;
-                System.out.println("Read line: " + line); // Debugging statement
+                System.out.println("Read line: " + line);
                 queue.put(line);
             }
             queue.put(FileProcessingUI.SENTINEL); // Indicate end of file
-            ui.incrementTotalLines(lineCount); // Update total line count
+            ui.incrementTotalLines(lineCount);
             System.out.println("Finished reading file: " + filePath);
         } catch (IOException | InterruptedException e) {
             e.printStackTrace();

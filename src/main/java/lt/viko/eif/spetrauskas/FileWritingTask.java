@@ -31,12 +31,12 @@ public class FileWritingTask implements Task {
                     }
                     continue;
                 }
-                System.out.println("Writing line: " + line); // Debugging statement
+                System.out.println("Writing line: " + line);
                 writer.write(line);
                 writer.newLine();
                 processedLines++;
-                ui.updateProgressBar(processedLines); // Update progress bar
-                ui.appendText(line); // Update UI with each written line
+                ui.updateProgressBar(processedLines);
+                ui.appendText(line);
             }
             System.out.println("Finished writing to file: " + filePath);
         } catch (IOException | InterruptedException e) {
